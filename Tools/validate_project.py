@@ -9,8 +9,11 @@ required = [
     "Assets/Scripts/Core/GameBootstrap.cs",
     "Assets/Scripts/Core/GameDirector.cs",
     "Assets/Scripts/Player/FirstPersonController.cs",
+    "Assets/Scripts/Player/PlayerBehaviorTracker.cs",
     "Assets/Scripts/Player/InteractionRaycaster.cs",
     "Assets/Scripts/World/WorldInteractable.cs",
+    "Assets/Scripts/World/HostCharacterController.cs",
+    "Assets/Scripts/World/ReactiveDialogueController.cs",
     "Assets/Scripts/Localization/GameLanguage.cs",
     "Assets/Scripts/Localization/LocalizedText.cs",
 ]
@@ -25,7 +28,18 @@ except Exception as exc:
     errors.append(f"Invalid package manifest: {exc}")
 
 localization = (root / "Assets/Scripts/Localization/LocalizedText.cs").read_text()
-for phrase in ("objective_intro", "host_intro", "interaction_hint", "door_locked", "generic_interact"):
+phrases = (
+    "objective_intro",
+    "host_intro",
+    "interaction_hint",
+    "door_locked",
+    "generic_interact",
+    "host_wrong_door",
+    "host_idle",
+    "host_sprinting",
+    "host_avoids_interaction",
+)
+for phrase in phrases:
     if localization.count(f'["{phrase}"]') != 2:
         errors.append(f"Localization key must exist in both languages: {phrase}")
 
@@ -38,4 +52,4 @@ if errors:
     print("\n".join(errors))
     sys.exit(1)
 
-print(f"Project integrity passed: {len(required)} required files, package manifest, bilingual keys, and C# brace checks.")
+print(f"Project integrity passed: {len(required)} required files, package manifest, {len(phrases)} bilingual keys, and C# brace checks.")
