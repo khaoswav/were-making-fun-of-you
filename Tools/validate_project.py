@@ -35,9 +35,13 @@ phrases = (
     "door_locked",
     "generic_interact",
     "host_wrong_door",
+    "host_wrong_door_alt",
     "host_idle",
+    "host_idle_alt",
     "host_sprinting",
+    "host_sprinting_alt",
     "host_avoids_interaction",
+    "host_avoids_interaction_alt",
 )
 for phrase in phrases:
     if localization.count(f'["{phrase}"]') != 2:
