@@ -10,6 +10,7 @@ namespace WereMakingFunOfYou
         private Text prompt;
         private Canvas canvas;
         private PlayerBehaviorTracker playerBehavior;
+        private ReactiveDialogueController hostDialogue;
         private bool started;
         private float messageUntil;
 
@@ -104,7 +105,7 @@ namespace WereMakingFunOfYou
             CreateHostPart(host.transform, PrimitiveType.Capsule, "Left Leg", new Vector3(-0.2f, 0.35f, 0), new Vector3(0.23f, 0.48f, 0.25f), new Color(0.025f, 0.02f, 0.03f));
             CreateHostPart(host.transform, PrimitiveType.Capsule, "Right Leg", new Vector3(0.2f, 0.35f, 0), new Vector3(0.23f, 0.48f, 0.25f), new Color(0.025f, 0.02f, 0.03f));
             host.AddComponent<HostCharacterController>();
-            host.AddComponent<ReactiveDialogueController>();
+            hostDialogue = host.AddComponent<ReactiveDialogueController>();
         }
 
         private static void CreateHostPart(Transform parent, PrimitiveType shape, string partName, Vector3 position, Vector3 scale, Color color)
@@ -230,6 +231,7 @@ namespace WereMakingFunOfYou
 
         public void ShowHostLine(string key, float duration = 4f)
         {
+            if (hostDialogue != null) hostDialogue.NotifyLineStarted(key);
             if (subtitle == null) return;
             subtitle.text = LocalizedText.Get(Language, key);
             subtitle.gameObject.SetActive(true);
