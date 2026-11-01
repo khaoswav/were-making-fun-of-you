@@ -1,0 +1,29 @@
+name: Browser Game Integrity
+on:
+  push:
+    branches: ["feature/**"]
+    paths:
+      - "browser/**"
+      - "Tools/validate_browser_game.py"
+      - ".github/workflows/browser-game.yml"
+  pull_request:
+    branches: ["feature/**"]
+    paths:
+      - "browser/**"
+      - "Tools/validate_browser_game.py"
+      - ".github/workflows/browser-game.yml"
+jobs:
+  browser-game:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Check JavaScript syntax
+        run: node --check browser/game.js
+      - name: Validate standalone game files
+        run: python Tools/validate_browser_game.py
