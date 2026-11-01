@@ -65,8 +65,9 @@ namespace WereMakingFunOfYou
         {
             if (visible)
             {
+                if (!wasLookingAtInteractable)
+                    interactedDuringLook = false;
                 wasLookingAtInteractable = true;
-                interactedDuringLook = false;
                 return;
             }
 
