@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#100b12">
+<title>WE'RE MAKING FUN OF YOU</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main id="shell">
+<canvas id="game" width="960" height="600" aria-label="First-person horror comedy game"></canvas>
+<div id="vignette"></div>
+<section id="title-screen" class="screen">
+  <div class="eyebrow">A LIVE BROADCAST FROM SOMEWHERE YOU SHOULDN'T BE</div>
+  <h1>WE'RE MAKING<br><span>FUN OF YOU</span></h1>
+  <p id="tagline">The audience is real. The exit isn't.</p>
+  <div class="menu-row"><button id="play-en">PLAY IN ENGLISH</button><button id="play-tr">TÜRKÇE OYNA</button></div><div class="menu-row hidden" id="continue-row"><button id="continue-en">CONTINUE · ENGLISH</button><button id="continue-tr">DEVAM ET · TÜRKÇE</button></div>
+  <p class="small">WASD move · Mouse look · E interact · SHIFT run · ESC pause</p>
+  <p class="small muted">A complete browser edition. No launcher or engine installation required.</p>
+</section>
+<section id="pause-screen" class="screen hidden">
+  <div class="eyebrow">BROADCAST PAUSED</div><h2 id="pause-title">TAKE A BREATH.</h2>
+  <button id="resume">RESUME</button><button id="restart">RESTART CHAPTER</button><button id="menu">MAIN MENU</button>
+</section>
+<section id="ending-screen" class="screen hidden">
+  <div class="eyebrow">TRANSMISSION ENDED</div><h1 id="ending-title">THE END</h1><p id="ending-copy"></p>
+  <button id="again">PLAY AGAIN</button>
+</section>
+<div id="hud" class="hidden">
+  <div id="chapter">CHAPTER 01</div><div id="objective"></div>
+  <div id="crosshair">+</div><div id="prompt"></div><div id="subtitle"></div>
+  <div id="inventory"></div><div id="clock">REC ●</div>
+</div>
+</main>
+<script src="game.js"></script>
+</body></html>
