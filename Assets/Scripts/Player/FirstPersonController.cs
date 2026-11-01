@@ -14,6 +14,7 @@ namespace WereMakingFunOfYou
         private PlayerBehaviorTracker behaviorTracker;
         private float verticalVelocity;
         private float pitch;
+        private bool controlsEnabled = true;
 
         private void Awake()
         {
@@ -22,9 +23,14 @@ namespace WereMakingFunOfYou
             behaviorTracker = GetComponent<PlayerBehaviorTracker>();
         }
 
+        public void SetControlEnabled(bool enabled)
+        {
+            controlsEnabled = enabled;
+        }
+
         private void Update()
         {
-            if (GameDirector.Instance == null || !GameDirector.Instance.IsStarted) return;
+            if (!controlsEnabled || GameDirector.Instance == null || !GameDirector.Instance.IsStarted) return;
             Look();
             Move();
             if (Input.GetKeyDown(KeyCode.Escape))

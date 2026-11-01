@@ -6,15 +6,18 @@ A Unity 3D project targeting Windows and macOS, with English and Turkish localiz
 
 ## Current development stage
 
-Stage 2: Host character and reactive dialogue foundation
+Stage 3: Interactive horror-comedy encounters
 
-- Runtime-generated prototype studio environment
-- First-person movement, mouse look, and sprint
-- Raycast interaction using E
-- Visible host character with a simple procedural 3D body
-- Host turns to face the player
-- Player behavior signals for idling, sustained sprinting, wrong-door attempts, and abandoned interactions
-- Bilingual reactive host dialogue with event priorities and cooldowns
+- Runtime-generated studio, host character, and player controller
+- First-person movement, mouse look, sprint, and E interaction
+- Host turns toward the player, walks to encounter locations, and waves
+- Player behavior signals and bilingual reactive host dialogue
+- Hide inside a locker while the host walks over, opens it, and stares at you
+- A door closes, reopens, and the host waves through it
+- Fake jumpscare button with a face pop-in and a punchline
+- Escalating wrong-door reactions
+- A safe room that becomes a trap and launches a monster chase
+- The monster stumbles, gets back up, and becomes faster and angrier
 - English / Turkish language selection at startup
 - Source-integrity GitHub Actions workflow
 
@@ -37,16 +40,20 @@ Stage 2: Host character and reactive dialogue foundation
 - W A S D: Move
 - Mouse: Look
 - Left Shift: Sprint
-- E: Interact
+- E: Interact, enter or leave the locker
 - Escape: Release mouse cursor
 
-## Input handling note
+## Input handling
 
-The current controller uses Unity's legacy Input Manager API (Input.GetAxis, Input.GetAxisRaw, and Input.GetKey). When opening the project in Unity, check **Edit > Project Settings > Player > Other Settings > Configuration > Active Input Handling** and select **Input Manager (Old)** or **Both**. The repository currently does not contain a committed ProjectSettings/ProjectSettings.asset, so this setting has not been pinned in source control and must be verified in the Editor.
+The current first-person controller and uGUI EventSystem use Unity's legacy Input Manager APIs. On first open, the Editor checks the Active Input Handling setting and warns if only the new Input System is enabled.
+
+To configure the project from the Editor, choose **Tools > WE'RE MAKING FUN OF YOU > Enable Legacy Input Manager**. This sets Active Input Handling to Input Manager (Old). Restart the Editor if Unity prompts you. You can alternatively select Both under **Edit > Project Settings > Player > Other Settings > Configuration > Active Input Handling**.
+
+The repository still does not include a committed ProjectSettings/ProjectSettings.asset or a hand-authored Unity scene. The setting tool applies the change inside the Unity Editor rather than shipping an incomplete PlayerSettings asset.
 
 ## Localization
 
-The first screen offers ENGLISH and TÜRKÇE. Runtime text is routed through LocalizedText, so dialogue and objective text can be expanded without scattering language checks throughout gameplay code.
+The first screen offers ENGLISH and TÜRKÇE. Runtime text is routed through LocalizedText, including all encounter reactions.
 
 ## Verification
 
@@ -54,7 +61,7 @@ Run the repository integrity check:
 
     python3 Tools/validate_project.py
 
-The GitHub Actions check validates project files and bilingual localization keys. It is not a Unity Editor compile or a Windows/macOS player build. Those require the Unity Editor and will be verified separately.
+GitHub Actions validates project structure, bilingual dialogue keys, encounter hooks, and the Editor input setup helper. It does not compile C# against Unity assemblies, run Play Mode, or create Windows/macOS player builds. Those checks still require Unity 6000.3.0f1 and must be performed in the Editor.
 
 ## Project identity
 

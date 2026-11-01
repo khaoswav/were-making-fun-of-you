@@ -11,6 +11,8 @@ namespace WereMakingFunOfYou
         private Canvas canvas;
         private PlayerBehaviorTracker playerBehavior;
         private ReactiveDialogueController hostDialogue;
+        private HorrorEncounterDirector horrorEncounters;
+        private Transform hostCharacter;
         private bool started;
         private float messageUntil;
 
@@ -86,11 +88,15 @@ namespace WereMakingFunOfYou
             playerBehavior = player.AddComponent<PlayerBehaviorTracker>();
             player.AddComponent<FirstPersonController>();
             player.AddComponent<InteractionRaycaster>();
+
+            horrorEncounters = gameObject.AddComponent<HorrorEncounterDirector>();
+            horrorEncounters.Initialize(this, player.transform, hostCharacter);
         }
 
         private void BuildHostCharacter()
         {
             var host = new GameObject("The Host");
+            hostCharacter = host.transform;
             host.transform.position = new Vector3(0, 0.55f, 13.15f);
             CreateHostPart(host.transform, PrimitiveType.Capsule, "Host Body", new Vector3(0, 1.05f, 0), new Vector3(0.72f, 0.95f, 0.48f), new Color(0.055f, 0.045f, 0.065f));
             CreateHostPart(host.transform, PrimitiveType.Sphere, "Host Head", new Vector3(0, 2.05f, 0.04f), new Vector3(0.62f, 0.7f, 0.58f), new Color(0.78f, 0.68f, 0.61f));
@@ -242,10 +248,19 @@ namespace WereMakingFunOfYou
         {
             if (content == "door")
             {
-                if (playerBehavior != null) playerBehavior.ReportWrongDoor();
-                ShowHostLine("door_locked");
+                if (horrorEncounters != null)
+                {
+                    horrorEncounters.RegisterWrongDoorAttempt();
+                }
+                else
+                {
+                    if (playerBehavior != null) playerBehavior.ReportWrongDoor();
+                    ShowHostLine("door_locked");
+                }
                 return;
             }
+
+            if (horrorEncounters != null && horrorEncounters.TryHandleInteraction(content)) return;
             ShowHostLine("generic_interact");
         }
     }
