@@ -1,5 +1,4 @@
 #if UNITY_EDITOR
-using System;
 using System.Linq;
 using System.Reflection;
 using UnityEditor;
@@ -47,19 +46,36 @@ namespace WereMakingFunOfYou.Editor
                 "OK");
         }
 
-        private static void ValidateInputHandling()
+        /// <summary>
+        /// Reads the effective Active Input Handling value without changing project settings.
+        /// Values: 0 = Old, 1 = New, 2 = Both.
+        /// </summary>
+        public static bool TryGetActiveInputHandler(out int activeInputHandler)
         {
             SerializedObject serializedSettings;
             PlayerSettings settings;
             SerializedProperty property = FindInputHandlingProperty(out serializedSettings, out settings);
             if (property == null)
             {
+                activeInputHandler = -1;
+                return false;
+            }
+
+            activeInputHandler = property.intValue;
+            return activeInputHandler >= 0 && activeInputHandler <= 2;
+        }
+
+        private static void ValidateInputHandling()
+        {
+            int activeInputHandler;
+            if (!TryGetActiveInputHandler(out activeInputHandler))
+            {
                 Debug.LogWarning(
                     "[WE'RE MAKING FUN OF YOU] Could not read Active Input Handling. Verify Project Settings > Player before entering Play Mode.");
                 return;
             }
 
-            if (property.intValue == 1)
+            if (activeInputHandler == 1)
             {
                 Debug.LogWarning(
                     "[WE'RE MAKING FUN OF YOU] The active Player Settings use Input System (New), but the controller and uGUI use UnityEngine.Input / StandaloneInputModule. Choose Tools > WE'RE MAKING FUN OF YOU > Enable Legacy Input Manager, or manually select Both.");
@@ -92,11 +108,14 @@ namespace WereMakingFunOfYou.Editor
                 FieldInfo overrideField = playerSettingsType.GetField(
                     "m_PlayerSettings",
                     BindingFlags.Instance | BindingFlags.NonPublic);
-                if (overrideField != null)
+                if (overrideField == null)
                 {
-                    PlayerSettings profileSettings = overrideField.GetValue(activeProfile) as PlayerSettings;
-                    if (profileSettings != null) settings = profileSettings;
+                    Debug.LogWarning("[WE'RE MAKING FUN OF YOU] The active Build Profile Player Settings field was not found. No settings were changed.");
+                    return null;
                 }
+
+                PlayerSettings profileSettings = overrideField.GetValue(activeProfile) as PlayerSettings;
+                if (profileSettings != null) settings = profileSettings;
             }
 #else
             settings = Resources.FindObjectsOfTypeAll<PlayerSettings>().FirstOrDefault();

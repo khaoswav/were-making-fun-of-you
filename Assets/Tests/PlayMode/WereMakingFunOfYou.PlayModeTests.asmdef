@@ -1,0 +1,19 @@
+{
+  "name": "WereMakingFunOfYou.PlayModeTests",
+  "rootNamespace": "WereMakingFunOfYou.Tests.PlayMode",
+  "references": [
+    "WereMakingFunOfYou.Runtime"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": false,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "optionalUnityReferences": [
+    "TestAssemblies"
+  ],
+  "noEngineReferences": false
+}

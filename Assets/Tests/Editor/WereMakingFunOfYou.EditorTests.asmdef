@@ -1,0 +1,22 @@
+{
+  "name": "WereMakingFunOfYou.EditorTests",
+  "rootNamespace": "WereMakingFunOfYou.Tests.Editor",
+  "references": [
+    "WereMakingFunOfYou.Runtime",
+    "WereMakingFunOfYou.Editor"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": false,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "optionalUnityReferences": [
+    "TestAssemblies"
+  ],
+  "noEngineReferences": false
+}

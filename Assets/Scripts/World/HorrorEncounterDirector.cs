@@ -21,6 +21,7 @@ namespace WereMakingFunOfYou
         private Transform host;
         private HostCharacterController hostMotion;
         private FirstPersonController playerMotion;
+        private PlayerBehaviorTracker behaviorTracker;
         private CharacterController playerCollider;
         private Transform lockerRoot;
         private Transform lockerDoor;
@@ -53,6 +54,7 @@ namespace WereMakingFunOfYou
 
             hostMotion = host.GetComponent<HostCharacterController>();
             playerMotion = player.GetComponent<FirstPersonController>();
+            behaviorTracker = player.GetComponent<PlayerBehaviorTracker>();
             playerCollider = player.GetComponent<CharacterController>();
             hostStagePosition = host.position;
             BuildEncounterEnvironment();
@@ -113,6 +115,7 @@ namespace WereMakingFunOfYou
         public void RegisterWrongDoorAttempt()
         {
             wrongDoorAttempts++;
+            behaviorTracker?.ReportWrongDoor();
             string line = wrongDoorAttempts switch
             {
                 1 => "door_locked",
@@ -303,6 +306,8 @@ namespace WereMakingFunOfYou
             if (playerCollider != null) playerCollider.enabled = true;
             if (playerMotion != null) playerMotion.SetControlEnabled(true);
 
+            // Leaving early must cancel the host's approach and restore its stage position.
+            hostMotion?.WalkTo(hostStagePosition);
             game.ShowHostLine("host_locker_exit");
         }
 
