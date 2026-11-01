@@ -248,9 +248,15 @@ namespace WereMakingFunOfYou
         {
             if (content == "door")
             {
-                if (playerBehavior != null) playerBehavior.ReportWrongDoor();
-                if (horrorEncounters != null) horrorEncounters.RegisterWrongDoorAttempt();
-                else ShowHostLine("door_locked");
+                if (horrorEncounters != null)
+                {
+                    horrorEncounters.RegisterWrongDoorAttempt();
+                }
+                else
+                {
+                    if (playerBehavior != null) playerBehavior.ReportWrongDoor();
+                    ShowHostLine("door_locked");
+                }
                 return;
             }
 

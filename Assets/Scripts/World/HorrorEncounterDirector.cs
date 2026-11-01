@@ -362,7 +362,8 @@ namespace WereMakingFunOfYou
             yield return StartCoroutine(ShowScareFace(0.72f));
 
             if (monsterRoot == null || monster == null || player == null) yield break;
-            monsterRoot.transform.position = hostStagePosition + new Vector3(-1.5f, -0.55f, -1.2f);
+            monsterRoot.transform.position = hostStagePosition + new Vector3(-1.5f, -0.55f, -2.5f);
+            safeRoomDoorTarget = -102f;
             monsterRoot.SetActive(true);
             monster.BeginChase(player, OnMonsterCaught, OnMonsterEnraged);
         }
