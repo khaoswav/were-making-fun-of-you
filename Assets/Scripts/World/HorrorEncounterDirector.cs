@@ -179,6 +179,22 @@ namespace WereMakingFunOfYou
             CreateCube("Safe Room Left Wall", center + new Vector3(-2.4f, 1.65f, 0f), new Vector3(0.2f, 3.3f, 4.2f), wall);
             CreateCube("Safe Room Right Wall", center + new Vector3(2.4f, 1.65f, 0f), new Vector3(0.2f, 3.3f, 4.2f), wall);
             CreateCube("Safe Room Ceiling", center + new Vector3(0f, 3.25f, 0f), new Vector3(5f, 0.2f, 4.2f), new Color(0.12f, 0.13f, 0.14f));
+            float doorwayWidth = 1.55f;
+            float frontWallWidth = 5f;
+            float sideSegmentWidth = (frontWallWidth - doorwayWidth) * 0.5f;
+            float sideSegmentOffset = frontWallWidth * 0.5f - sideSegmentWidth * 0.5f;
+            Vector3 frontWallCenter = center + new Vector3(0f, 1.65f, 2.05f);
+
+            CreateCube("Safe Room Front Left Wall",
+                frontWallCenter + Vector3.left * sideSegmentOffset,
+                new Vector3(sideSegmentWidth, 3.3f, 0.2f), wall);
+            CreateCube("Safe Room Front Right Wall",
+                frontWallCenter + Vector3.right * sideSegmentOffset,
+                new Vector3(sideSegmentWidth, 3.3f, 0.2f), wall);
+            CreateCube("Safe Room Door Header",
+                center + new Vector3(0f, 3.025f, 2.05f),
+                new Vector3(doorwayWidth, 0.55f, 0.2f), wall);
+
             safeRoomDoor = BuildHingedDoor(
                 "Safe Room Door",
                 center + new Vector3(0f, 0f, 2.02f),
@@ -384,7 +400,11 @@ namespace WereMakingFunOfYou
             monsterRoot.transform.position = hostStagePosition + new Vector3(-1.5f, -0.55f, -2.5f);
             safeRoomDoorTarget = 102f;
             monsterRoot.SetActive(true);
-            monster.BeginChase(player, OnMonsterCaught, OnMonsterEnraged);
+            monster.BeginChase(
+                player,
+                safeRoomCenter + new Vector3(0f, 0f, 2.8f),
+                OnMonsterCaught,
+                OnMonsterEnraged);
         }
 
         private IEnumerator ShowScareFace(float duration)

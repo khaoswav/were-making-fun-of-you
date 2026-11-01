@@ -23,6 +23,8 @@ namespace WereMakingFunOfYou
         private CharacterController character;
         private Transform visualRoot;
         private Transform target;
+        private Vector3 entranceWaypoint;
+        private bool hasEntranceWaypoint;
         private Action caughtCallback;
         private Action enragedCallback;
         private ChasePhase phase;
@@ -37,11 +39,13 @@ namespace WereMakingFunOfYou
             if (visualRoot != null) uprightRotation = visualRoot.localRotation;
         }
 
-        public void BeginChase(Transform chaseTarget, Action onCaught, Action onEnraged)
+        public void BeginChase(Transform chaseTarget, Vector3 waypoint, Action onCaught, Action onEnraged)
         {
             if (chaseTarget == null) return;
 
             target = chaseTarget;
+            entranceWaypoint = waypoint;
+            hasEntranceWaypoint = true;
             caughtCallback = onCaught;
             enragedCallback = onEnraged;
             chaseStartedAt = Time.time;
@@ -53,6 +57,7 @@ namespace WereMakingFunOfYou
         {
             phase = ChasePhase.Dormant;
             target = null;
+            hasEntranceWaypoint = false;
             caughtCallback = null;
             enragedCallback = null;
             if (visualRoot != null) visualRoot.localRotation = uprightRotation;
@@ -73,11 +78,20 @@ namespace WereMakingFunOfYou
                 return;
             }
 
-            Vector3 direction = target.position - transform.position;
+            Vector3 destination = hasEntranceWaypoint ? entranceWaypoint : target.position;
+            Vector3 direction = destination - transform.position;
             direction.y = 0f;
             float distance = direction.magnitude;
 
-            if (distance <= catchDistance)
+            if (hasEntranceWaypoint && distance <= 0.9f)
+            {
+                hasEntranceWaypoint = false;
+                direction = target.position - transform.position;
+                direction.y = 0f;
+                distance = direction.magnitude;
+            }
+
+            if (!hasEntranceWaypoint && distance <= catchDistance)
             {
                 Action callback = caughtCallback;
                 StopChase();
