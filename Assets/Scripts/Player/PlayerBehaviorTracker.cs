@@ -20,18 +20,21 @@ namespace WereMakingFunOfYou
 
         private float lastMovementTime;
         private float sprintStartedAt = -1f;
+        private bool trackingStarted;
         private bool idleReported;
         private bool sprintReported;
         private bool wasLookingAtInteractable;
         private bool interactedDuringLook;
 
-        private void Awake()
-        {
-            lastMovementTime = Time.time;
-        }
-
         public void ReportMovement(Vector2 input, bool sprinting)
         {
+            if (!trackingStarted)
+            {
+                trackingStarted = true;
+                lastMovementTime = Time.time;
+                return;
+            }
+
             bool moving = input.sqrMagnitude > 0.01f;
             if (moving)
             {
