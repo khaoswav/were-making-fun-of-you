@@ -119,7 +119,7 @@ namespace WereMakingFunOfYou
             rect.anchoredPosition = position;
             rect.sizeDelta = new Vector2(850, 90);
             var text = go.AddComponent<Text>();
-            text.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
+            text.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
             text.fontSize = size;
             text.alignment = alignment;
             text.color = Color.white;
