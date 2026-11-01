@@ -246,7 +246,7 @@ namespace WereMakingFunOfYou
             }
             else if (phase == LockerPhase.HostApproach && Time.time >= phaseUntil)
             {
-                lockerDoorTarget = -102f;
+                lockerDoorTarget = 102f;
                 lockerPhase = (int)LockerPhase.DoorOpening;
                 phaseUntil = Time.time + 1.1f;
             }
@@ -363,7 +363,7 @@ namespace WereMakingFunOfYou
 
             if (monsterRoot == null || monster == null || player == null) yield break;
             monsterRoot.transform.position = hostStagePosition + new Vector3(-1.5f, -0.55f, -2.5f);
-            safeRoomDoorTarget = -102f;
+            safeRoomDoorTarget = 102f;
             monsterRoot.SetActive(true);
             monster.BeginChase(player, OnMonsterCaught, OnMonsterEnraged);
         }
