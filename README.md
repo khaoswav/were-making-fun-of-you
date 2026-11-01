@@ -9,7 +9,8 @@ The playable game is in `browser/`. It does **not** require Unity, Unity Hub, a 
 - Open `browser/index.html` in a modern desktop browser.
 - Choose English or Türkçe.
 - Click the game view to capture the mouse.
-- **WASD** move, **mouse** look, **E** interact, **Shift** run, **Esc** pause.
+- **WASD** move, **mouse** look, **E** interact, **Shift** run, **M** mute, **Esc** pause.
+- Chapter checkpoints are saved locally in the browser, so you can continue after closing the page.
 
 For local hosting, run `python3 -m http.server 8000` from the repository root and visit `http://localhost:8000/browser/`.
 
