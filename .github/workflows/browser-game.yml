@@ -27,3 +27,5 @@ jobs:
         run: node --check browser/game.js
       - name: Validate standalone game files
         run: python Tools/validate_browser_game.py
+      - name: Run gameplay regression tests
+        run: node Tools/test_browser_game.cjs

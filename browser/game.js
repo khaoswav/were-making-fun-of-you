@@ -68,5 +68,6 @@ canvas.addEventListener('click',()=>{if(state.active&&!state.paused&&document.po
 document.addEventListener('pointerlockchange',()=>{if(state.active&&!state.paused&&document.pointerLockElement!==canvas)pause()});
 window.addEventListener('blur',()=>{state.keys={}});
 $('tagline').textContent=tr.en.tag;
+if(window.location&&window.location.search.includes('test=1'))window.__WMFO_TEST__={state,chapters,loadLevel,interact,finishEnding,enemyWaypoint,findTarget};
 render();
 })();
