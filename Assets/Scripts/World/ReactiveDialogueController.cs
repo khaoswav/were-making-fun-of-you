@@ -18,6 +18,8 @@ namespace WereMakingFunOfYou
         private readonly List<PendingLine> pending = new List<PendingLine>();
         private readonly Dictionary<PlayerBehaviorEvent, float> nextAllowedAt =
             new Dictionary<PlayerBehaviorEvent, float>();
+        private readonly Dictionary<PlayerBehaviorEvent, int> nextVariantIndex =
+            new Dictionary<PlayerBehaviorEvent, int>();
         private PlayerBehaviorTracker tracker;
         private float nextDialogueAt;
         private bool subscribed;
@@ -83,7 +85,11 @@ namespace WereMakingFunOfYou
             nextAllowedAt[behavior] = Time.time + cooldown;
 
             for (int i = 0; i < pending.Count; i++)
-                if (pending[i].Key == key) return;
+                if (pending[i].Key.StartsWith(key)) return;
+
+            int variant = nextVariantIndex.TryGetValue(behavior, out int next) ? next : 0;
+            nextVariantIndex[behavior] = (variant + 1) % 2;
+            if (variant == 1) key += "_alt";
 
             pending.Add(new PendingLine { Key = key, Priority = priority, QueuedAt = Time.time });
         }
