@@ -1,86 +1,41 @@
 # WE'RE MAKING FUN OF YOU
 
-A first-person horror-comedy game about a game show that knows you're playing.
+A first-person horror-comedy game about a live show that knows you're playing.
 
-A Unity 3D project targeting Windows and macOS, with English and Turkish localization from the beginning.
+## Play the standalone browser edition
 
-## Current development stage
+The playable game is in `browser/`. It does **not** require Unity, Unity Hub, a game-engine installation, build tools, or paid assets.
 
-Stage 3: Interactive horror-comedy encounters
+- Open `browser/index.html` in a modern desktop browser.
+- Choose English or Türkçe.
+- Click the game view to capture the mouse.
+- **WASD** move, **mouse** look, **E** interact, **Shift** run, **Esc** pause.
 
-- Runtime-generated studio, host character, and player controller
-- First-person movement, mouse look, sprint, and E interaction
-- Host turns toward the player, walks to encounter locations, and waves
-- Player behavior signals and bilingual reactive host dialogue
-- Hide inside a locker while the host walks over, opens it, and stares at you
-- A door closes, reopens, and the host waves through it
-- Fake jumpscare button with a face pop-in and a punchline
-- Escalating wrong-door reactions
-- A safe room that becomes a trap and launches a monster chase
-- The monster stumbles, gets back up, and becomes faster and angrier
-- English / Turkish language selection at startup
-- Source-integrity GitHub Actions workflow
+For local hosting, run `python3 -m http.server 8000` from the repository root and visit `http://localhost:8000/browser/`.
 
-## Requirements
+## Game content
 
-- Unity 6000.3.0f1
-- Windows or macOS editor
-- No paid Unity packages are required for the current prototype
+The browser edition contains eight connected chapters, bilingual dialogue/objectives, first-person raycast rendering, collectibles and switches, hostile pursuit sequences, optional hidden evidence, and three ending routes. The intended full-story target is approximately 60 minutes, depending on exploration and discovery.
 
-## Open the project
-
-1. Clone or download this repository.
-2. In Unity Hub, choose Add > Add project from disk.
-3. Select the repository folder.
-4. Open it with Unity 6000.3.0f1.
-5. Open any scene and press Play. The prototype environment is generated at runtime.
-
-## Controls
-
-- W A S D: Move
-- Mouse: Look
-- Left Shift: Sprint
-- E: Interact, enter or leave the locker
-- Escape: Release mouse cursor
-
-## Input handling
-
-The current first-person controller and uGUI EventSystem use Unity's legacy Input Manager APIs. On first open, the Editor checks the Active Input Handling setting and warns if only the new Input System is enabled.
-
-To configure the project from the Editor, choose **Tools > WE'RE MAKING FUN OF YOU > Enable Legacy Input Manager**. This sets Active Input Handling to Input Manager (Old). Restart the Editor if Unity prompts you. You can alternatively select Both under **Edit > Project Settings > Player > Other Settings > Configuration > Active Input Handling**.
-
-The repository still does not include a committed ProjectSettings/ProjectSettings.asset or a hand-authored Unity scene. The setting tool applies the change inside the Unity Editor rather than shipping an incomplete PlayerSettings asset.
-
-## Localization
-
-The first screen offers ENGLISH and TÜRKÇE. Runtime text is routed through LocalizedText, including all encounter reactions.
+1. The Warm-Up
+2. Backstage Etiquette
+3. The Archive of You
+4. The Sound of Screams
+5. Maintenance Nightmare
+6. The Audience
+7. Control / Alt / Delete
+8. The Last Laugh
 
 ## Verification
 
-Run the repository integrity check:
+Run:
 
-    python3 Tools/validate_project.py
+```bash
+python3 Tools/validate_browser_game.py
+```
 
-GitHub Actions validates project structure, assembly-definition JSON, bilingual dialogue keys, encounter regression hooks, and the presence of Unity test scenarios. It does not compile C# against Unity assemblies, execute the Unity Test Framework, run Play Mode, or create Windows/macOS player builds. Those checks still require Unity 6000.3.0f1 and must be performed in the Editor.
+This checks the browser game's required files and key game systems. It is a source-integrity check, not a substitute for testing in multiple real browsers and screen sizes.
 
-## Unity validation tests
+## Legacy Unity prototype
 
-The project now separates runtime, Editor, Editor-test, and Play Mode-test assemblies. Unity Test Framework 1.4.5 is pinned in the package manifest.
-
-After opening the project in Unity 6000.3.0f1 and waiting for package resolution and script compilation:
-
-1. Open **Window > General > Test Runner**.
-2. Run the **EditMode** tests. These verify the effective Active Input Handling property can be read and every required localization key resolves in English and Turkish.
-3. Run the **PlayMode** tests. These verify runtime bootstrap idempotence, preservation of the Stage 2 wrong-door behavior event, monster catch handling, chase cancellation, and the stumble-to-enraged transition.
-4. Open the Console and confirm there are no compiler errors before entering Play Mode.
-5. To change the legacy input backend, use **Tools > WE'RE MAKING FUN OF YOU > Enable Legacy Input Manager**. The Editor test only reads the current value; it does not change your project settings.
-
-These tests are committed as executable Unity Test Framework scenarios, but they have not been run in this environment. The current GitHub Actions workflow remains a source-integrity check, not a Unity compilation or gameplay test.
-
-## Project identity
-
-- Title: WE'RE MAKING FUN OF YOU
-- Genre: First-person horror comedy
-- Target playtime: approximately 60 minutes for the full game
-- Target platforms: Windows and macOS
-- Languages: English and Turkish
+The earlier Unity prototype and its staged pull requests remain in the repository history for reference. The standalone browser edition is the current no-Unity playable target.
