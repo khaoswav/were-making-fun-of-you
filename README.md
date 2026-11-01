@@ -61,7 +61,21 @@ Run the repository integrity check:
 
     python3 Tools/validate_project.py
 
-GitHub Actions validates project structure, bilingual dialogue keys, encounter hooks, and the Editor input setup helper. It does not compile C# against Unity assemblies, run Play Mode, or create Windows/macOS player builds. Those checks still require Unity 6000.3.0f1 and must be performed in the Editor.
+GitHub Actions validates project structure, assembly-definition JSON, bilingual dialogue keys, encounter regression hooks, and the presence of Unity test scenarios. It does not compile C# against Unity assemblies, execute the Unity Test Framework, run Play Mode, or create Windows/macOS player builds. Those checks still require Unity 6000.3.0f1 and must be performed in the Editor.
+
+## Unity validation tests
+
+The project now separates runtime, Editor, Editor-test, and Play Mode-test assemblies. Unity Test Framework 1.4.5 is pinned in the package manifest.
+
+After opening the project in Unity 6000.3.0f1 and waiting for package resolution and script compilation:
+
+1. Open **Window > General > Test Runner**.
+2. Run the **EditMode** tests. These verify the effective Active Input Handling property can be read and every required localization key resolves in English and Turkish.
+3. Run the **PlayMode** tests. These verify runtime bootstrap idempotence, preservation of the Stage 2 wrong-door behavior event, monster catch handling, chase cancellation, and the stumble-to-enraged transition.
+4. Open the Console and confirm there are no compiler errors before entering Play Mode.
+5. To change the legacy input backend, use **Tools > WE'RE MAKING FUN OF YOU > Enable Legacy Input Manager**. The Editor test only reads the current value; it does not change your project settings.
+
+These tests are committed as executable Unity Test Framework scenarios, but they have not been run in this environment. The current GitHub Actions workflow remains a source-integrity check, not a Unity compilation or gameplay test.
 
 ## Project identity
 
