@@ -293,6 +293,7 @@ namespace WereMakingFunOfYou
         private void StartPrankDoor()
         {
             if (prankPhase != 0) return;
+            hostMotion?.WalkTo(new Vector3(6.4f, 0.55f, 7f));
             prankPhase = 1;
             prankDoorTarget = -94f;
             prankPhaseUntil = Time.time + 1.15f;
@@ -308,9 +309,27 @@ namespace WereMakingFunOfYou
             }
             else if (prankPhase == 2 && Time.time >= prankPhaseUntil)
             {
-                prankPhase = 0;
+                prankDoorTarget = -94f;
+                prankPhase = 3;
+                prankPhaseUntil = Time.time + 1.15f;
+            }
+            else if (prankPhase == 3 && Time.time >= prankPhaseUntil)
+            {
+                prankPhase = 4;
+                prankPhaseUntil = Time.time + 2.4f;
                 hostMotion?.TriggerWave(2.4f);
                 game.ShowHostLine("host_door_wave");
+            }
+            else if (prankPhase == 4 && Time.time >= prankPhaseUntil)
+            {
+                prankDoorTarget = 0f;
+                prankPhase = 5;
+                prankPhaseUntil = Time.time + 1.15f;
+            }
+            else if (prankPhase == 5 && Time.time >= prankPhaseUntil)
+            {
+                prankPhase = 0;
+                hostMotion?.WalkTo(hostStagePosition);
             }
         }
 
