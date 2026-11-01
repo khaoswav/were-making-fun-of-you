@@ -38,5 +38,17 @@ loadLevel(0);
 const badge=state.objects.find(o=>o.kind==='badge');
 state.player.x=badge.x;state.player.y=badge.y;state.player.a=0;
 assert.equal(findTarget(),badge);interact();assert.equal(state.collected,1);
-loadLevel(7);const secret=state.objects.find(o=>o.kind==='secret');state.player.x=secret.x;state.player.y=secret.y;state.player.a=0;interact();assert.equal(state.ending,'secret');
-console.log('Browser gameplay tests passed: 8 chapters, '+objectCount+' reachable interactables, 16 bilingual notes, objective counts, enemy spawn/path access, pickup interaction, secret ending.');
+for(let chapter=0;chapter<7;chapter++){
+ loadLevel(chapter);
+ const required=state.objects.filter(o=>!['exit','secret','note','ending','ending2'].includes(o.kind));
+ for(const o of required){state.player.x=o.x;state.player.y=o.y;state.player.a=0;interact();}
+ assert.equal(state.collected,chapters[chapter].need,'chapter '+(chapter+1)+' objective completion');
+ const exit=state.objects.find(o=>o.kind==='exit');state.player.x=exit.x;state.player.y=exit.y;state.player.a=0;interact();
+ assert.equal(state.level,chapter+1,'chapter '+(chapter+1)+' exit progression');
+}
+loadLevel(7);
+for(const [kind,ending] of [['ending','cut'],['ending2','host'],['secret','secret']]){
+ const o=state.objects.find(x=>x.kind===kind);state.player.x=o.x;state.player.y=o.y;state.player.a=0;interact();assert.equal(state.ending,ending,'ending route '+ending);
+}
+assert.equal(storage.get('wmfo_checkpoint'),'7','final chapter checkpoint saved');
+console.log('Browser gameplay tests passed: 8 chapters, '+objectCount+' reachable interactables, 16 bilingual notes, all objectives and exits, chapter progression, three endings, checkpoint persistence.');

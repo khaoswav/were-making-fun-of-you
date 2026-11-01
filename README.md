@@ -16,7 +16,7 @@ For local hosting, run `python3 -m http.server 8000` from the repository root an
 
 ## Game content
 
-The browser edition contains eight connected chapters, bilingual dialogue/objectives, first-person raycast rendering, collectibles and switches, hostile pursuit sequences, optional hidden evidence, and three ending routes. The intended full-story target is approximately 60 minutes, depending on exploration and discovery.
+The browser edition contains eight connected chapters, bilingual dialogue/objectives, first-person raycast rendering, collectibles and switches, hostile pursuit sequences, optional hidden evidence, and three ending routes. The design target is approximately 60 minutes, depending on exploration and discovery. This duration has not yet been measured in a full human playthrough.
 
 1. The Warm-Up
 2. Backstage Etiquette
