@@ -6,12 +6,15 @@ A Unity 3D project targeting Windows and macOS, with English and Turkish localiz
 
 ## Current development stage
 
-Stage 1: First playable foundation
+Stage 2: Host character and reactive dialogue foundation
 
 - Runtime-generated prototype studio environment
 - First-person movement, mouse look, and sprint
 - Raycast interaction using E
-- Host dialogue and objective HUD
+- Visible host character with a simple procedural 3D body
+- Host turns to face the player
+- Player behavior signals for idling, sustained sprinting, wrong-door attempts, and abandoned interactions
+- Bilingual reactive host dialogue with event priorities and cooldowns
 - English / Turkish language selection at startup
 - Source-integrity GitHub Actions workflow
 
@@ -36,6 +39,10 @@ Stage 1: First playable foundation
 - Left Shift: Sprint
 - E: Interact
 - Escape: Release mouse cursor
+
+## Input handling note
+
+The current controller uses Unity's legacy Input Manager API (Input.GetAxis, Input.GetAxisRaw, and Input.GetKey). When opening the project in Unity, check **Edit > Project Settings > Player > Other Settings > Configuration > Active Input Handling** and select **Input Manager (Old)** or **Both**. The repository currently does not contain a committed ProjectSettings/ProjectSettings.asset, so this setting has not been pinned in source control and must be verified in the Editor.
 
 ## Localization
 

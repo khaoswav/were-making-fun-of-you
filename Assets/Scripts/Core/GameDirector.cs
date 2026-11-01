@@ -9,6 +9,8 @@ namespace WereMakingFunOfYou
         private Text objective;
         private Text prompt;
         private Canvas canvas;
+        private PlayerBehaviorTracker playerBehavior;
+        private ReactiveDialogueController hostDialogue;
         private bool started;
         private float messageUntil;
 
@@ -60,6 +62,8 @@ namespace WereMakingFunOfYou
             light.intensity = 5;
             light.color = new Color(1f, 0.72f, 0.68f);
 
+            BuildHostCharacter();
+
             var door = GameObject.CreatePrimitive(PrimitiveType.Cube);
             door.name = "Exit Door";
             door.transform.position = new Vector3(0, 1.5f, -7.8f);
@@ -68,6 +72,7 @@ namespace WereMakingFunOfYou
             door.AddComponent<WorldInteractable>().SetContent("door");
 
             var player = new GameObject("Player");
+            player.tag = "Player";
             player.transform.position = new Vector3(0, 1, -2);
             var controller = player.AddComponent<CharacterController>();
             controller.height = 1.8f;
@@ -78,8 +83,41 @@ namespace WereMakingFunOfYou
             cameraObject.tag = "MainCamera";
             cameraObject.AddComponent<Camera>();
             cameraObject.AddComponent<AudioListener>();
+            playerBehavior = player.AddComponent<PlayerBehaviorTracker>();
             player.AddComponent<FirstPersonController>();
             player.AddComponent<InteractionRaycaster>();
+        }
+
+        private void BuildHostCharacter()
+        {
+            var host = new GameObject("The Host");
+            host.transform.position = new Vector3(0, 0.55f, 13.15f);
+            CreateHostPart(host.transform, PrimitiveType.Capsule, "Host Body", new Vector3(0, 1.05f, 0), new Vector3(0.72f, 0.95f, 0.48f), new Color(0.055f, 0.045f, 0.065f));
+            CreateHostPart(host.transform, PrimitiveType.Sphere, "Host Head", new Vector3(0, 2.05f, 0.04f), new Vector3(0.62f, 0.7f, 0.58f), new Color(0.78f, 0.68f, 0.61f));
+            CreateHostPart(host.transform, PrimitiveType.Cube, "Host Tie", new Vector3(0, 1.48f, 0.255f), new Vector3(0.12f, 0.48f, 0.045f), new Color(0.68f, 0.025f, 0.09f));
+            CreateHostPart(host.transform, PrimitiveType.Sphere, "Left Eye", new Vector3(-0.14f, 2.12f, 0.29f), new Vector3(0.09f, 0.13f, 0.055f), Color.white);
+            CreateHostPart(host.transform, PrimitiveType.Sphere, "Right Eye", new Vector3(0.14f, 2.12f, 0.29f), new Vector3(0.09f, 0.13f, 0.055f), Color.white);
+            CreateHostPart(host.transform, PrimitiveType.Sphere, "Left Pupil", new Vector3(-0.14f, 2.12f, 0.34f), new Vector3(0.035f, 0.07f, 0.025f), Color.black);
+            CreateHostPart(host.transform, PrimitiveType.Sphere, "Right Pupil", new Vector3(0.14f, 2.12f, 0.34f), new Vector3(0.035f, 0.07f, 0.025f), Color.black);
+            CreateHostPart(host.transform, PrimitiveType.Cube, "Host Smile", new Vector3(0, 1.91f, 0.315f), new Vector3(0.22f, 0.035f, 0.035f), new Color(0.18f, 0.025f, 0.035f));
+            CreateHostPart(host.transform, PrimitiveType.Capsule, "Left Arm", new Vector3(-0.52f, 1.12f, 0), new Vector3(0.2f, 0.62f, 0.2f), new Color(0.055f, 0.045f, 0.065f));
+            CreateHostPart(host.transform, PrimitiveType.Capsule, "Right Arm", new Vector3(0.52f, 1.12f, 0), new Vector3(0.2f, 0.62f, 0.2f), new Color(0.055f, 0.045f, 0.065f));
+            CreateHostPart(host.transform, PrimitiveType.Capsule, "Left Leg", new Vector3(-0.2f, 0.35f, 0), new Vector3(0.23f, 0.48f, 0.25f), new Color(0.025f, 0.02f, 0.03f));
+            CreateHostPart(host.transform, PrimitiveType.Capsule, "Right Leg", new Vector3(0.2f, 0.35f, 0), new Vector3(0.23f, 0.48f, 0.25f), new Color(0.025f, 0.02f, 0.03f));
+            host.AddComponent<HostCharacterController>();
+            hostDialogue = host.AddComponent<ReactiveDialogueController>();
+        }
+
+        private static void CreateHostPart(Transform parent, PrimitiveType shape, string partName, Vector3 position, Vector3 scale, Color color)
+        {
+            var part = GameObject.CreatePrimitive(shape);
+            part.name = partName;
+            part.transform.SetParent(parent, false);
+            part.transform.localPosition = position;
+            part.transform.localScale = scale;
+            part.GetComponent<Renderer>().material.color = color;
+            var collider = part.GetComponent<Collider>();
+            if (collider != null) Destroy(collider);
         }
 
         private static void CreateWall(Vector3 position, Vector3 scale)
@@ -193,6 +231,7 @@ namespace WereMakingFunOfYou
 
         public void ShowHostLine(string key, float duration = 4f)
         {
+            if (hostDialogue != null) hostDialogue.NotifyLineStarted(key);
             if (subtitle == null) return;
             subtitle.text = LocalizedText.Get(Language, key);
             subtitle.gameObject.SetActive(true);
@@ -201,7 +240,12 @@ namespace WereMakingFunOfYou
 
         public void Interact(string content)
         {
-            if (content == "door") { ShowHostLine("door_locked"); return; }
+            if (content == "door")
+            {
+                if (playerBehavior != null) playerBehavior.ReportWrongDoor();
+                ShowHostLine("door_locked");
+                return;
+            }
             ShowHostLine("generic_interact");
         }
     }

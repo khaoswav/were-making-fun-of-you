@@ -11,6 +11,7 @@ namespace WereMakingFunOfYou
         [SerializeField] private float gravity = -20f;
         private CharacterController character;
         private Transform playerCamera;
+        private PlayerBehaviorTracker behaviorTracker;
         private float verticalVelocity;
         private float pitch;
 
@@ -18,6 +19,7 @@ namespace WereMakingFunOfYou
         {
             character = GetComponent<CharacterController>();
             playerCamera = GetComponentInChildren<Camera>().transform;
+            behaviorTracker = GetComponent<PlayerBehaviorTracker>();
         }
 
         private void Update()
@@ -51,13 +53,16 @@ namespace WereMakingFunOfYou
         {
             float x = Input.GetAxisRaw("Horizontal");
             float z = Input.GetAxisRaw("Vertical");
+            Vector2 input = new Vector2(x, z);
+            bool sprinting = Input.GetKey(KeyCode.LeftShift) && input.sqrMagnitude > 0.01f;
             Vector3 direction = (transform.right * x + transform.forward * z).normalized;
-            float speed = Input.GetKey(KeyCode.LeftShift) ? sprintSpeed : walkSpeed;
+            float speed = sprinting ? sprintSpeed : walkSpeed;
             if (character.isGrounded && verticalVelocity < 0) verticalVelocity = -2f;
             verticalVelocity += gravity * Time.deltaTime;
             Vector3 velocity = direction * speed;
             velocity.y = verticalVelocity;
             character.Move(velocity * Time.deltaTime);
+            if (behaviorTracker != null) behaviorTracker.ReportMovement(input, sprinting);
         }
     }
 }
