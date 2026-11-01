@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,6 +15,8 @@ namespace WereMakingFunOfYou
 
         [SerializeField] private float globalCooldown = 2.8f;
         [SerializeField] private float queueLifetime = 12f;
+
+        public event Action<string> DialogueLineStarted;
 
         private readonly List<PendingLine> pending = new List<PendingLine>();
         private readonly Dictionary<PlayerBehaviorEvent, float> nextAllowedAt =
@@ -42,6 +45,11 @@ namespace WereMakingFunOfYou
                 GameDirector.Instance.ShowHostLine(line.Key, 4.5f);
 
             nextDialogueAt = Time.time + globalCooldown;
+        }
+
+        public void NotifyLineStarted(string localizationKey)
+        {
+            DialogueLineStarted?.Invoke(localizationKey);
         }
 
         private void SubscribeToPlayer()
