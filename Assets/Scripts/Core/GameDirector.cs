@@ -90,7 +90,7 @@ namespace WereMakingFunOfYou
         private void BuildHostCharacter()
         {
             var host = new GameObject("The Host");
-            host.transform.position = new Vector3(0, 0.2f, 13.15f);
+            host.transform.position = new Vector3(0, 0.55f, 13.15f);
             CreateHostPart(host.transform, PrimitiveType.Capsule, "Host Body", new Vector3(0, 1.05f, 0), new Vector3(0.72f, 0.95f, 0.48f), new Color(0.055f, 0.045f, 0.065f));
             CreateHostPart(host.transform, PrimitiveType.Sphere, "Host Head", new Vector3(0, 2.05f, 0.04f), new Vector3(0.62f, 0.7f, 0.58f), new Color(0.78f, 0.68f, 0.61f));
             CreateHostPart(host.transform, PrimitiveType.Cube, "Host Tie", new Vector3(0, 1.48f, 0.255f), new Vector3(0.12f, 0.48f, 0.045f), new Color(0.68f, 0.025f, 0.09f));
